@@ -1,0 +1,16 @@
+.todo-heading {
+    text-decoration: underline;
+}
+
+.todo-item {
+    border-bottom: 1px solid;
+}
+
+.todo-item.completed {
+    background: greenyellow;
+}
+
+
+.todo-item.pending {
+    background: orangered;
+}
