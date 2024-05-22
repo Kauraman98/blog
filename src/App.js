@@ -19,6 +19,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MainWrapper from './components/main-wrapper';
 import Blog from './blog/blog';
 import Author from './author/author';
+import CreateBlog from './blog/create-blog';
+import Profile from './profile/profile';
+import { UserContext } from './context/user-context';
+import { useEffect , useState} from 'react';
+import { auth, getCurrentUser } from './services/firebase-config';
 
 var list = [3,5,3,6,  {name: "asd", age: 78}, {name: "abc", age:89}];
 
@@ -62,8 +67,11 @@ const router = createBrowserRouter(
           path: "/signin",
           element: <SignInForm/>
         },
+        {path: "profile", element: <Profile/>},
         {path: "/blog", element: <Blog/>},
         {path:'/author',element: <Author/>},
+        {path:'create-blog',element: <CreateBlog/>},
+        {path: '/edit-blog/:blogId', element: <CreateBlog/>},
 
         {path: "", element:<Home/>}
        
@@ -75,12 +83,22 @@ const router = createBrowserRouter(
 
 
 function App() {
+  const [user, setUser] = useState(getCurrentUser());
+  useEffect(() => {
+    
+    function handleAuthStateChanged(user) {
+      setUser(user);
+    }
+     return auth.onAuthStateChanged(handleAuthStateChanged);
+     
+}, []);
   return (
+    <UserContext.Provider value={user}>
     <RouterProvider router={router}>
 
    
     </RouterProvider>
-
+</UserContext.Provider>
   );
 }
 
