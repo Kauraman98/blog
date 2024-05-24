@@ -24,6 +24,7 @@ import Profile from './profile/profile';
 import { UserContext } from './context/user-context';
 import { useEffect , useState} from 'react';
 import { auth, getCurrentUser } from './services/firebase-config';
+import { MyBlogs } from './blog/my-blogs';
 
 var list = [3,5,3,6,  {name: "asd", age: 78}, {name: "abc", age:89}];
 
@@ -68,10 +69,11 @@ const router = createBrowserRouter(
           element: <SignInForm/>
         },
         {path: "profile", element: <Profile/>},
-        {path: "/blog", element: <Blog/>},
+        { path: "/blog/:blogId", element: <Blog /> },
         {path:'/author',element: <Author/>},
         {path:'create-blog',element: <CreateBlog/>},
-        {path: '/edit-blog/:blogId', element: <CreateBlog/>},
+        { path: '/edit-blog/:blogId', element: <CreateBlog isEdit={true} /> },
+        { path: '/my-blogs', element: <MyBlogs /> },
 
         {path: "", element:<Home/>}
        

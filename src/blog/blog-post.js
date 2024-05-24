@@ -2,21 +2,30 @@
 import React from 'react';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useAuthor } from '../components/useAuthor';
 
-const BlogPostPage = ({ title, date, content, author, coverImage }) => {
+const BlogPostPage = ({ title, updatedOn, content, authorId, photourl }) => {
+
+  const author = useAuthor(authorId);
+
+  //format date in format mmm dd, yyyy
+  const _updatedOn = updatedOn && new Date(updatedOn);
+
+  const updatedOnDate = _updatedOn && _updatedOn.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
   return (
     <Container className="my-5">
       <Row>
         <Col>
-          <Image src={coverImage} alt={title} className="img-fluid mb-4" />
+          <Image src={photourl} style={{ maxHeight: 500, width: '100%' }} height={500} fluid alt={title} className="img-fluid mb-4" />
           <h1>{title}</h1>
-          <p className="text-muted">{date}</p>
+          <p className="text-muted">{updatedOnDate}</p>
           <p>{content}</p>
           <hr />
           <Row className="mt-4">
             <Col md={2}>
               <Image
-                src={author.image}
+                src={author.photourl}
                 alt={author.name}
                 roundedCircle
                 fluid

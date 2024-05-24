@@ -1,77 +1,42 @@
 import { firestoreInstance, app } from "./firebase-config";
-import { getStorage, ref , uploadBytes, getDownloadURL} from "firebase/storage";
-import {collection, doc, getDoc, setDoc, addDoc, collectionGroup} from 'firebase/firestore'
-import { get } from "firebase/database";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { collection, doc, getDoc, setDoc, addDoc, getDocs, query, orderBy, where, deleteDoc } from 'firebase/firestore'
+import { get, update } from "firebase/database";
+
 
 const firebaseStorage = getStorage(app);
+const userBlogCollectionName = 'userBlogs'
+const blogSubCollection = 'blogs'
 
-export function getBlogObject() {
-return  {
-    id: new Date().getTime().toString(),
-    title: '',
-    content: '',
-    photourl: '',
-    summary: '',
-    createdOn: '',
-    state: 'draft',
-    authorid: ''
-};
+function getBlogContentCollection() {
+    return collection(firestoreInstance, 'blogcontent');
+}
+function getBlogCollection() {
+    return collection(firestoreInstance, 'blogs');
 }
 
-export const getBlog = async (id) => {
-    const blogRef = doc(firestoreInstance,'blogs', id);
-    const blog = await getDoc(blogRef);
-    console.log("blog",blog);
-    if (blog.exists())
-        return blog.data();
-    else 
-     {
-        return getBlogObject();
-     }
-};
+export async function getBlogs() {
 
-
-export const getCurrentuserBlog = async (userId,id) => {
-    const blogRef = doc(firestoreInstance,'userblogs', userId,id);
-    const blog = await getDoc(blogRef);
-    console.log("blog",blog);
-    if (blog.exists())
-        return blog.data();
-    else 
-     {
-        return getBlogObject();
-     }
-};
-
-export const getCurrentuserAllBlogs = async (userId,id) => {
-    const blogRef = doc(firestoreInstance,'userblogs');
-    const blog = await getDoc(blogRef);
-    console.log("blog",blog);
-    if (blog.exists())
-        return blog.data();
-    else 
-     {
-        return getBlogObject();
-     }
-};
-
-export const updateBlog = async (blog, id, userId) => {
-    
-        const blogRef = doc(firestoreInstance, 'userblogs', userId, id);
-        await setDoc(blogRef, blog);
-        return blog;
+    const q = query(getBlogCollection(), orderBy('updatedOn', 'desc'));
+    const blogs = await getDocs(q);
+    return blogs.docs.map((blog) => {
+        return { ...blog.data(), updatedOn: blog.data().updatedOn.toDate(), createdOn: blog.data().createdOn.toDate(), id: blog.id };
+    });
 }
 
-export const createBlog = async (blog, userId) => {
-    
-    const blogRef = doc(firestoreInstance, `userblogs/${userId}`, 'blogs');
-   const snapshot = await addDoc(blogRef, blog);
-    return snapshot.id;
-}
+export async function getBlog(id) {
 
-export const uploadBlogImage = async (file, id, userId) => {
-        
-        const imageRef = ref(firebaseStorage, `blogs/${userId}/blog-${id}.jpg`);
-    var snapshot = await uploadBytes(imageRef, file);
-        return await getDownloadURL(snapshot.ref);
-};
+    const blogRef = doc(getBlogCollection(), id);
+    const blog = await getDoc(blogRef);
+    const blogContent = await getDoc(doc(firestoreInstance, getBlogContentCollection().path, id));
+
+    console.log("blog", blog);
+    if (blog.exists())
+    {
+
+        return { ...blog.data(), updatedOn: blog.data().updatedOn.toDate(), createdOn: blog.data().createdOn.toDate(), id: blog.id, content: blogContent.exists() ? blogContent.data().content : '' };
+    }
+    else {
+        return {};
+    }
+}

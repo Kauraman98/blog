@@ -14,3 +14,21 @@
     align-items: center;
     z-index: 1000;
 }
+
+
+.blog-row  {
+    /* border-bottom: 2px solid #484646; */
+    padding: 10px;  
+    border-bottom:1px solid slategray;
+   
+}
+.blog-row:hover {
+    /* background-color: #e7e1e1; */
+    transform: scale(1.1);
+    /* color: white; */
+    cursor: pointer;
+}
+
+.app-link {
+    text-decoration: none;
+}

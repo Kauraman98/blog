@@ -2,11 +2,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import BlogTile from '../components/blog-tile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getBlogs } from '../services/blog-service';
 
 
 function Home() {
-    const [blogs, setBlogs] = useState([1,2,3,5])
+  const [blogs, setBlogs] = useState([])
+
+  useEffect(() => {
+    getBlogs().then((blogs) => {
+      setBlogs(blogs);
+    });
+  }, []);
   return (
     <Container>
       <Row>
@@ -18,7 +25,7 @@ function Home() {
       
       </Row>
       <Row>
-        {blogs.map((_, i) => <BlogTile/>)}
+        {blogs.map((blog) => <BlogTile key={blog.id} blog={blog} />)}
       </Row>
     </Container>
   );

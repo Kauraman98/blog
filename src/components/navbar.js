@@ -23,14 +23,16 @@ function NavBar() {
   
   };
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container style={{background:"grey"}}>
+    <Navbar expand="lg" className="" bg="dark" data-bs-theme="dark">
+      <Container style={{}} fluid className='justify-content-space-between'>
         
-      <Link to="/">
+
+        <Navbar.Brand href="#home" style={{ textAlign: "center" }}>
+          <Link to="/">
       <h3 className="text-xl text-black">V <span className="text-orange-400">Blog</span></h3>
       
       </Link>
-        <Navbar.Brand href="#home" style={{textAlign:"center"}}></Navbar.Brand>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
 
@@ -46,7 +48,7 @@ function NavBar() {
                <Link to="/create-blog">Write</Link>
               </NavDropdown.Item> 
               <NavDropdown.Item>
-                My Blogs
+                  <Link to="/my-blogs">My Blogs</Link>
               </NavDropdown.Item> 
               <NavDropdown.Item onClick={handleSignOut}>Sign Out</NavDropdown.Item>
               <NavDropdown.Divider />
