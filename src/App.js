@@ -70,7 +70,7 @@ const router = createBrowserRouter(
         },
         {path: "profile", element: <Profile/>},
         { path: "/blog/:blogId", element: <Blog /> },
-        {path:'/author',element: <Author/>},
+        { path: '/author/:authorId', element: <Author /> },
         {path:'create-blog',element: <CreateBlog/>},
         { path: '/edit-blog/:blogId', element: <CreateBlog isEdit={true} /> },
         { path: '/my-blogs', element: <MyBlogs /> },

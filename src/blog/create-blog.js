@@ -12,7 +12,28 @@ import { auth } from 'firebaseui';
 import { uploadProfileImage, getProfile, updateProfile } from '../services/profile-service';
 import { UserContext } from '../context/user-context';
 import { getBlogObject, getCurrentuserBlog, updateBlog, uploadBlogImage, createBlog, publishBlog, archiveBlog, deleteBlog } from '../services/author-blog-service';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+const toolbarOptions = [// custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+  [{ 'font': [] }],
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+  ['link', 'image', 'video', 'formula'],
 
+  // custom button values
+  [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+  [{ 'script': 'sub' }, { 'script': 'super' }],        // outdent/indent
+
+
+
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+];
 function CreateBlog({ isEdit }) {
   const user = useContext(UserContext) || {};
   const { blogId } = useParams();
@@ -77,7 +98,8 @@ function CreateBlog({ isEdit }) {
     setBlog({ ...blog, summary: event.target.value });
   }
   const handleContentChange = (event) => {
-    setBlog({ ...blog, content: event.target.value });
+    console.log("Content", event);
+    setBlog({ ...blog, content: event });
   };
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
@@ -167,7 +189,8 @@ function CreateBlog({ isEdit }) {
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Content</Form.Label>
-              <Form.Control as="textarea" value={blog.content} placeholder="Content" onChange={handleContentChange} />
+              {/* <Form.Control as="textarea" value={blog.content} placeholder="Content" onChange={handleContentChange} /> */}
+              <ReactQuill theme="snow" modules={{ toolbar: toolbarOptions }} value={blog.content} onChange={handleContentChange} />
             </Form.Group>
             {error && <Form.Text>{error}</Form.Text>}
             <div className="d-grid gap-2 mt-5">

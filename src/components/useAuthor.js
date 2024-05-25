@@ -7,6 +7,7 @@ export function useAuthor(authorId) {
 
         if (authorId) {
             getAuthorProfile(authorId).then((author) => {
+                console.log("author", author, authorId);
                 setAuthor(author);
             });
         }

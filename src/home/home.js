@@ -26,7 +26,9 @@ function Home() {
       </Row>
       <Row>
         
-        {blogs.map((blog) => <BlogTile key={blog.id} blog={blog} />)}
+        <Col xs={12} md={{ offset: 2, span: 8 }}>
+          {blogs.map((blog) => <BlogTile key={blog.id} blog={blog} />)}
+        </Col>
       </Row>
     </Container>
   );

@@ -8,6 +8,9 @@ import { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/user-context';
+import Dropdown from 'react-bootstrap/Dropdown';
+import NavItem from 'react-bootstrap/NavItem';
+import NavLink from 'react-bootstrap/NavLink';
 import './navbar.css';
 function NavBar() {
 
@@ -35,12 +38,13 @@ function NavBar() {
       </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+          {user && <Nav.Link><Link className='mr-2 font-weight-400 text-decoration-none text-primary' to="/create-blog">Write</Link></Nav.Link>}
 
           <Nav >
          
         {user && 
-            <NavDropdown title="Profile" id="basic-nav-dropdown" >
+              <NavDropdown title="Profile" id="basic-nav-dropdown"  >
               <NavDropdown.Item href="#action/3.1">{user.email}</NavDropdown.Item>
               <NavDropdown.Item>
                <Link to="/profile">My Profile</Link>
@@ -53,9 +57,7 @@ function NavBar() {
               </NavDropdown.Item> 
               <NavDropdown.Item onClick={handleSignOut}>Sign Out</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
+
             </NavDropdown>}   
     
 

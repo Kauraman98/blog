@@ -31,4 +31,24 @@
 
 .app-link {
     text-decoration: none;
+    color: inherit;
+}
+
+.app-link:hover {
+    text-decoration: underline;
+}
+
+.blog-tile {
+    cursor: pointer;
+}
+.blog-tile-content {
+    flex-grow: 5;
+}
+.blog-tile-image {
+    flex-grow: 1;
+}
+
+.dropdown-menu[data-bs-popper] {
+    left: unset !important;
+    right:-13px
 }

@@ -7,6 +7,10 @@ import { get, update } from "firebase/database";
 const firebaseStorage = getStorage(app);
 const userBlogCollectionName = 'userBlogs'
 const blogSubCollection = 'blogs'
+
+function convertToDate(date) {
+    return new Date(date);
+}
 export function getBlogObject() {
 return  {
     id: new Date().getTime().toString(),
@@ -67,7 +71,7 @@ export const getCurrentuserAllBlogs = async (userId, state) => {
     const q = query(blogCollection, where('state', '==', state), orderBy('updatedOn', 'desc'));
     const blogs = await getDocs(q);
     return blogs.docs.map((blog) => {
-        return { ...blog.data(), updatedOn: blog.data().updatedOn.toDate(), createdOn: blog.data().createdOn.toDate(), id: blog.id };
+        return { ...blog.data(), updatedOn: convertToDate(blog.data().updatedOn), createdOn: convertToDate(blog.data().createdOn), id: blog.id };
     });
 
 };

@@ -7,6 +7,11 @@ import { get, update } from "firebase/database";
 const firebaseStorage = getStorage(app);
 const userBlogCollectionName = 'userBlogs'
 const blogSubCollection = 'blogs'
+function convertToDate(date) {
+    console.log("date", date);
+    if (date)
+        return date.toDate();
+}
 
 function getBlogContentCollection() {
     return collection(firestoreInstance, 'blogcontent');
@@ -20,9 +25,20 @@ export async function getBlogs() {
     const q = query(getBlogCollection(), orderBy('updatedOn', 'desc'));
     const blogs = await getDocs(q);
     return blogs.docs.map((blog) => {
-        return { ...blog.data(), updatedOn: blog.data().updatedOn.toDate(), createdOn: blog.data().createdOn.toDate(), id: blog.id };
+        return { ...blog.data(), updatedOn: convertToDate(blog.data().updatedOn), createdOn: convertToDate(blog.data().createdOn), id: blog.id };
     });
 }
+
+
+export async function getBlogsByAuthor(authorId) {
+
+    const q = query(getBlogCollection(), where('authorId', '==', authorId), orderBy('updatedOn', 'desc'));
+    const blogs = await getDocs(q);
+    return blogs.docs.map((blog) => {
+        return { ...blog.data(), updatedOn: convertToDate(blog.data().updatedOn), createdOn: convertToDate(blog.data().createdOn), id: blog.id };
+    });
+}
+
 
 export async function getBlog(id) {
 
@@ -34,7 +50,7 @@ export async function getBlog(id) {
     if (blog.exists())
     {
 
-        return { ...blog.data(), updatedOn: blog.data().updatedOn.toDate(), createdOn: blog.data().createdOn.toDate(), id: blog.id, content: blogContent.exists() ? blogContent.data().content : '' };
+        return { ...blog.data(), updatedOn: convertToDate(blog.data().updatedOn), createdOn: convertToDate(blog.data().createdOn), id: blog.id, content: blogContent.exists() ? blogContent.data().content : '' };
     }
     else {
         return {};
