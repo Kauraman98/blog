@@ -8,6 +8,7 @@ import { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/user-context';
+import './navbar.css';
 function NavBar() {
 
   const user = useContext(UserContext);
@@ -29,7 +30,7 @@ function NavBar() {
 
         <Navbar.Brand href="#home" style={{ textAlign: "center" }}>
           <Link to="/">
-      <h3 className="text-xl text-black">V <span className="text-orange-400">Blog</span></h3>
+      <h3 className="text-white">V <span className="text-orange-400">Blog</span></h3>
       
       </Link>
         </Navbar.Brand>

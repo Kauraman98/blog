@@ -25,6 +25,7 @@ function Home() {
       
       </Row>
       <Row>
+        
         {blogs.map((blog) => <BlogTile key={blog.id} blog={blog} />)}
       </Row>
     </Container>
