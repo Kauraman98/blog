@@ -1,6 +1,6 @@
 import { firestoreInstance, app } from "./firebase-config";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { collection, doc, getDoc, setDoc, addDoc, getDocs, query, orderBy, where, deleteDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, setDoc, addDoc, getDocs, query, orderBy, where, deleteDoc, limit } from 'firebase/firestore'
 import { get, update } from "firebase/database";
 
 
@@ -35,6 +35,17 @@ function getBlogCollection() {
 
 
 
+export async function searchBlogs(searchString) {
+
+
+    // lowercase search string and split with space and search usning array-contains on searchQueries field
+    const q = query(getBlogCollection(), where('searchQueries', 'array-contains-any', searchString.toLowerCase().split(" ").slice(0,20)), orderBy('updatedOn', 'desc'));
+  
+    const blogs = await getDocs(q);
+    return blogs.docs.map((blog) => {
+        return { ...blog.data(), updatedOn: convertToDate(blog.data().updatedOn), createdOn: convertToDate(blog.data().createdOn), id: blog.id };
+    });
+}
 
 
 
@@ -42,9 +53,8 @@ export async function getBlogs() {
 
 
 
-
+    // fetch first 5 blogs ordered by updatedOn date
     const q = query(getBlogCollection(), orderBy('updatedOn', 'desc'));
-
 
     
     const blogs = await getDocs(q);

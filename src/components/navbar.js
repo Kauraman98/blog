@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import {auth as authInstance} from '../services/firebase-config';
 import { useContext, useEffect } from 'react';
 import { useState } from 'react';
@@ -27,9 +27,17 @@ function NavBar() {
   const user = useContext(UserContext);
   
   const navigate = useNavigate();
-  const [Blogs, setBlogs] = useState([]);
+
+  let [searchParams, setSearchParams] = useSearchParams();
   const [search, SetSearch]=useState("");
 
+
+  useEffect(() => {
+
+    if(searchParams.get('search')) {
+      SetSearch(searchParams.get('search'));
+    }
+  }, [searchParams])
 
 
   const handleSignOut = () => {
@@ -39,14 +47,24 @@ function NavBar() {
 
   
   };
- const SearchBlog=(e)=>{
 
-  e.preventDefault();
-  console.log(e.target.value)
-  setBlogs(Blogs.filter((Blogs)=>
-  Blogs.title.toLowerCase().includes(search.toLowerCase())
-  ))
+  
 
+ const handleSearchInputChange = (event) => {
+
+    const value = event.target.value;
+      if(event.key === 'Enter') { 
+      navigate(`/?search=${value}`);
+    }
+ }
+
+ const handleSearch = (event) => {
+    const value = event.target.value;
+    SetSearch(value);
+    if(!value) { 
+      navigate(`/`);
+    
+    }
  }
 
 
@@ -67,39 +85,40 @@ function NavBar() {
         </Navbar.Brand>
         <Navbar.Brand href="#home" style={{ textAlign: "center",  }}>
           <Link to="/" style={{ textDecoration:"transparent"}}>
-          <div style={{ position: "relative", display: "inline-block", marginLeft: "15px" }}>
-        
-         <input 
-        onChange={(e)=>{SetSearch(e.target.value)}}
-
-          type="text"
-          placeholder="search your blog"
-          
-          onKeyUp={SearchBlog} 
-          style={{
-            textAlign:"center",
-            color:"black",
-            padding: "5px 30px 5px 10px", // Add padding for the icon
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-            backgroundColor: "#f0f0f0",
-            width: "100%",
-          }}
-        />   
-        <FaSearch  button type="submit " style={{ 
-          
-         
-          position: "absolute",
-          left: "10px",
-          top: "50%",
-          margin:"inherit",
-          transform: "translateY(-50%)",
-          color: "#ccc"
-        }} />
-       
-      </div>
+      
 
       </Link>
+      <div style={{ position: "relative", display: "inline-block", marginLeft: "15px" }}>
+        
+        <input 
+        onChange={handleSearch}
+
+         type="search"
+         placeholder="search your blog"
+         value={search}
+         onKeyUp={handleSearchInputChange} 
+         style={{
+           position: 'relative',
+           color:"black",
+           padding: "5px 30px 5px 40px", // Add padding for the icon
+           borderRadius: "5px",
+           border: "1px solid #ccc",
+           backgroundColor: "#f0f0f0",
+           width: "100%",
+         }}
+       />   
+       <FaSearch  button type="submit " style={{ 
+         
+        
+         position: "absolute",
+         left: "2px",
+         top: "50%",
+         margin:"inherit",
+         transform: "translateY(-50%)",
+         color: "#ccc"
+       }} />
+      
+     </div>
       
         </Navbar.Brand>
         

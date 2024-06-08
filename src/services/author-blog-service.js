@@ -79,10 +79,11 @@ export const getCurrentuserAllBlogs = async (userId, state) => {
 export const updateBlog = async (blog, id, userId) => {
     const blogSubCollection = getUserBlogCollection(userId);
     const _blog = { ...blog };
+    _blog.searchQueries = _blog.title.toLowerCase().split(' ');
     delete _blog.content;
 
     const blogRef = doc(firestoreInstance, blogSubCollection.path, id);
-        await setDoc(blogRef, blog);
+        await setDoc(blogRef, _blog);
     await setDoc(doc(firestoreInstance, getBlogContentCollection().path, id), { id: id, content: blog.content });
         return blog;
 }
@@ -91,12 +92,12 @@ export const createBlog = async (blog, userId) => {
     // const userIdDoc = doc(firestoreInstance, userBlogs, userId);
     const _blog = { ...blog };
     delete _blog.content;
-
+    _blog.searchQueries = _blog.title.toLowerCase().split(' ');
     const blogSubCollection = getUserBlogCollection(userId);
     const blogContentCollection = getBlogContentCollection()
 
     // const blogRef = doc(firestoreInstance, blogSubCollection, 'blogs');
-    const snapshot = await addDoc(blogSubCollection, blog);
+    const snapshot = await addDoc(blogSubCollection, _blog);
 
     const contentSnapshot = await setDoc(doc(firestoreInstance, blogContentCollection.path, snapshot.id), { id: snapshot.id, content: blog.content });
     return snapshot.id;
@@ -121,7 +122,9 @@ export const publishBlog = async (blog, id, userId) => {
 
     // add it to blogs collection
     const blogRef = doc(firestoreInstance, 'blogs', id);
-    await setDoc(blogRef, blog);
+    const _blog = {...blog};
+    delete _blog.content;
+    await setDoc(blogRef, _blog);
     // update the state to published
 
 };

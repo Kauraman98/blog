@@ -3,11 +3,26 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import BlogTile from '../components/blog-tile';
 import { useEffect, useState } from 'react';
-import { getBlogs } from '../services/blog-service';
+import { getBlogs, searchBlogs } from '../services/blog-service';
+import { useSearchParams } from 'react-router-dom';
 
 
 function Home() {
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([]);
+
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if(searchParams.get('search')) {
+      searchBlogs(searchParams.get('search')).then((blogs) => {
+        setBlogs(blogs);
+      });
+    } else {
+      getBlogs().then((blogs) => {
+        setBlogs(blogs);
+      });
+    }
+  }, [searchParams])
 
   useEffect(() => {
     getBlogs().then((blogs) => {
