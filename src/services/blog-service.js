@@ -20,9 +20,33 @@ function getBlogCollection() {
     return collection(firestoreInstance, 'blogs');
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function getBlogs() {
 
+
+
+
     const q = query(getBlogCollection(), orderBy('updatedOn', 'desc'));
+
+
+    
     const blogs = await getDocs(q);
     return blogs.docs.map((blog) => {
         return { ...blog.data(), updatedOn: convertToDate(blog.data().updatedOn), createdOn: convertToDate(blog.data().createdOn), id: blog.id };

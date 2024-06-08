@@ -5,14 +5,21 @@ import BlogTile from '../components/blog-tile';
 import BlogPostPage from './blog-post';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getBlog } from '../services/blog-service';
+import { getBlog, searchBlogs } from '../services/blog-service';
+import * as Quill from 'quill';
 
+
+
+  
 
 
 function Blog() {
   const blogId = useParams().blogId;
   const [blog, setBlog] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+
+
 
   useEffect(() => {
     if (blogId) {
@@ -23,10 +30,18 @@ function Blog() {
       });
     }
   }, [blogId]);
+
+
+
+
+
+  
+
   return (
     <Container>
       <Row>
-        <Col></Col>
+        <Col>
+       </Col>
       </Row>
       <Row>
         <Col xs={12} md={{ offset: 2, span: 8 }}>
@@ -38,4 +53,4 @@ function Blog() {
   );
 }
 
-export default Blog;
+export default Blog;  

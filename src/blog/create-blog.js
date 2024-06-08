@@ -159,10 +159,10 @@ function CreateBlog({ isEdit }) {
           isEdit && <Col xs={4} >
             {blog.state === 'draft' && <Button variant="outline-primary" size='sm' onClick={handlePublishBlog}> Publish Blog</Button>}
             {blog.state === 'published' && <Button variant="outline-primary" size='sm' onClick={handleArchiveBlog}> Archive Blog</Button>}
-            {blog.state === 'archived' && <Button variant="outline-primary" size='sm' onClick={handlePublishBlog}> Publish Blog</Button>}
-            {blog.state != 'published' && <Button variant="outline-danger" size='sm' onClick={handleDeleteBlog}> Delete Blog</Button>}
+            {blog.state === 'archived' && <Button className='my-3' variant="outline-primary" size='sm' onClick={handlePublishBlog}> Publish Blog</Button>}
+            {blog.state != 'published' && <Button  className="my-3" variant="outline-danger" size='sm' onClick={handleDeleteBlog}> Delete Blog</Button>}
           </Col>
-        }
+        }w
 
       </Row>
       <Row>
